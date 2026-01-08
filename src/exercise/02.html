@@ -1,29 +1,82 @@
 <!-- Intro to raw React APIs -->
 <!-- http://localhost:3000/isolated/exercise/02.html -->
-
+<html>
 <body>
   <div id="root"></div>
-
-  <!-- 🐨 add React and ReactDOM on the page.
-       💰 Here are script tags that'll do the job:
+  <div class="container"></div>
   <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
-  -->
 
+  
   <script type="module">
+    // ^ Why "module"? We include module to tell the browser that thsi is a ES module.
+    // This allows use to use modern JS features like 'import'
+    // even though this example we're not using import
+    
+
+    // Grab the DOM node where React will mount the app.
+    // This element must already exist in your HTML: <div id="root"></div> (it's above)
     const rootElement = document.getElementById('root')
 
-    // You're going to re-implement this code using React!
-    // 💣 So go ahead and delete this implementation (or comment it out for now)
-    // These three lines are similar to React.createElement
-    const element = document.createElement('div')
-    element.textContent = 'Hello World' // 💰 in React, you set this with the "children" prop
-    element.className = 'container' // 💰 in React, this is also called the "className" prop
-    // This is similar to ReactDOM.createRoot().render()
-    rootElement.append(element)
+    // These are the "props" for our React element.
+    // Props are just a plain JavaScript object.
+    //
+    // - `id` will become an HTML attribute on the element
+    // - `children` represents what goes INSIDE the element
+    //
+    // IMPORTANT:
+    // This object describes WHAT we want,
+    // not how the browser should create it.
+    const elementProps = {
+      id: 'element-id',
+      children: 'Hello world!',
+    }
 
-    // 🐨 Please re-implement the regular document.createElement code above
-    // with these React API calls
-    // 💰 The example in the markdown file should be a good hint for you.
+    // This is the type of element we want React to create.
+    // Since it's a string, React treats it as a native HTML element.
+    //
+    // Examples:
+    // 'h1'  -> <h1>
+    // 'div' -> <div>
+    // 'p'   -> <p>
+    const elementType = 'h1'
+
+    // This is where the magic happens.
+    //
+    // React.createElement DOES NOT create a real DOM node.
+    // Instead, it creates a *React Element* — a lightweight
+    // JavaScript object that DESCRIBES the UI.
+    //
+    // Internally, it produces something conceptually like:
+    // {
+    //   type: 'h1',
+    //   props: { id: 'element-id', children: 'Hello world!' }
+    // }
+    //
+    // This object is part of React's "Virtual DOM".
+    const reactElement = React.createElement(elementType, elementProps)
+
+
+    // Create a React "root" tied to the DOM node we selected earlier.
+    //
+    // This tells React:
+    // "You are now responsible for everything inside this DOM node."
+    //
+    // ReactDOM.createRoot enables React's modern rendering features
+    // (like concurrent rendering in React 18+).
+    const root = ReactDOM.createRoot(rootElement)
+
+    // Render the React element into the root.
+    //
+    // React compares the React Element (virtual DOM)
+    // with what's currently in the real DOM
+    // and updates the DOM efficiently.
+    //
+    // Resulting HTML will look like:
+    // <h1 id="element-id">Hello world!</h1>
+    root.render(reactElement)
+  
+  
   </script>
 </body>
+</html>
